@@ -4,7 +4,9 @@ import com.CodingBrajmohan.DarlingAI.dto.project.ProjectRequest;
 import com.CodingBrajmohan.DarlingAI.dto.project.ProjectResponse;
 import com.CodingBrajmohan.DarlingAI.dto.project.ProjectSummaryResponse;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.ProjectService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ProjectController {
 
-    private ProjectService projectService;
+    ProjectService projectService;
 
     @GetMapping
     public ResponseEntity<List<ProjectSummaryResponse>> getMyProjects() {

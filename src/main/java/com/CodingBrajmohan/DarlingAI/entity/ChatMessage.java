@@ -1,9 +1,7 @@
 package com.CodingBrajmohan.DarlingAI.entity;
 
 import com.CodingBrajmohan.DarlingAI.enums.MessageRole;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;

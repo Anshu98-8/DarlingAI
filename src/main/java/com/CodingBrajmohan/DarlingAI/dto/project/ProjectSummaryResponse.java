@@ -2,9 +2,9 @@ package com.CodingBrajmohan.DarlingAI.dto.project;
 
 import java.time.Instant;
 
-public record ProjectSummaryResponse(
+public record   ProjectSummaryResponse(
         Long id,
-        String name,
+        String projectName,
         Instant createdAt,
         Instant updatedAt
 ) {

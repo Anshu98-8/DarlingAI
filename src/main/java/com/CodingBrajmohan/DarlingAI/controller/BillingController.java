@@ -3,7 +3,9 @@ package com.CodingBrajmohan.DarlingAI.controller;
 import com.CodingBrajmohan.DarlingAI.dto.subscription.*;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.PlanService;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.SubscriptionService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +13,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BillingController {
 
-    private PlanService planService;
-    private SubscriptionService subscriptionService;
+    PlanService planService;
+    SubscriptionService subscriptionService;
 
     @GetMapping("/api/plans")
     public ResponseEntity<List<PlanResponse>> getAllPlans() {

@@ -1,15 +1,12 @@
 package com.CodingBrajmohan.DarlingAI.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Plan {
-
     Long id;
 
     String name;
