@@ -1,11 +1,14 @@
 package com.CodingBrajmohan.DarlingAI.entity;
 
+import jakarta.persistence.Embeddable;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+@Embeddable
 @Getter
 @Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectMemberId {
     Long projectId;
     Long userId;

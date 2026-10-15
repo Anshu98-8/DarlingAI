@@ -11,9 +11,7 @@ public class Plan {
 
     String name;
 
-
-
-    String stripePriceId;
+        String stripePriceId;
     Integer maxProjects;
     Integer maxTokensPerDay;
     Integer maxPreviews; //max number of previews allowed per plan
