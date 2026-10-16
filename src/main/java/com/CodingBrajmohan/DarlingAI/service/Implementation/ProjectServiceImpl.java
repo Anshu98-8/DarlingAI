@@ -4,8 +4,13 @@ import com.CodingBrajmohan.DarlingAI.dto.project.ProjectRequest;
 import com.CodingBrajmohan.DarlingAI.dto.project.ProjectResponse;
 import com.CodingBrajmohan.DarlingAI.dto.project.ProjectSummaryResponse;
 import com.CodingBrajmohan.DarlingAI.entity.Project;
+import com.CodingBrajmohan.DarlingAI.entity.ProjectMember;
+import com.CodingBrajmohan.DarlingAI.entity.ProjectMemberId;
 import com.CodingBrajmohan.DarlingAI.entity.User;
+import com.CodingBrajmohan.DarlingAI.enums.ProjectRole;
+import com.CodingBrajmohan.DarlingAI.exception.ResourceNotFoundException;
 import com.CodingBrajmohan.DarlingAI.mapper.ProjectMapper;
+import com.CodingBrajmohan.DarlingAI.repository.ProjectMemberRepository;
 import com.CodingBrajmohan.DarlingAI.repository.ProjectRepository;
 import com.CodingBrajmohan.DarlingAI.repository.UserRepository;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.ProjectService;
@@ -27,25 +32,38 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectRepository projectRepository;
     UserRepository userRepository;
     ProjectMapper projectMapper;
+    ProjectMemberRepository projectMemberRepository;
 
     @Override
     public ProjectResponse createProject(ProjectRequest request, Long userId) {
-        User owner = userRepository.findById(userId).orElseThrow();
 
-        Project project = Project.builder().name(request.name()).owner(owner).isPublic(false).build();
+        User owner = userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("User", userId.toString())
+        );
 
+        Project project = Project.builder()
+                .name(request.name())
+                .isPublic(false)
+                .build();
         project = projectRepository.save(project);
+
+
+        ProjectMemberId projectMemberId = new ProjectMemberId(project.getId(), owner.getId());
+        ProjectMember projectMember = ProjectMember.builder()
+                .id(projectMemberId)
+                .projectRole(ProjectRole.OWNER)
+                .user(owner)
+                .acceptedAt(Instant.now())
+                .invitedAt(Instant.now())
+                .project(project)
+                .build();
+        projectMemberRepository.save(projectMember);
+
         return projectMapper.toProjectResponse(project);
     }
 
-
     @Override
     public List<ProjectSummaryResponse> getUserProjects(Long userId) {
-        //        return projectRepository.findAllAccessibleByUser(userId)
-//                .stream()
-//                .map(projectMapper::toProjectSummaryResponse)
-//                .collect(Collectors.toList());
-
         var projects = projectRepository.findAllAccessibleByUser(userId);
         return projectMapper.toListOfProjectSummaryResponse(projects);
     }
@@ -60,10 +78,6 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectResponse updateProject(Long id, ProjectRequest request, Long userId) {
         Project project = getAccessibleProjectById(id, userId);
 
-        if (!project.getOwner().getId().equals(userId)) {
-            throw new RuntimeException("You are not allowed to update the name");
-        }
-
         project.setName(request.name());
         project = projectRepository.save(project);
 
@@ -74,10 +88,6 @@ public class ProjectServiceImpl implements ProjectService {
     public void softDelete(Long id, Long userId) {
         Project project = getAccessibleProjectById(id, userId);
 
-        if (!project.getOwner().getId().equals(userId)) {
-            throw new RuntimeException("You are not allowed to delete");
-        }
-
         project.setDeletedAt(Instant.now());
         projectRepository.save(project);
     }
@@ -85,6 +95,7 @@ public class ProjectServiceImpl implements ProjectService {
     ///  INTERNAL FUNCTIONS
 
     public Project getAccessibleProjectById(Long projectId, Long userId) {
-        return projectRepository.findAccessibleProjectById(projectId, userId).orElseThrow();
+        return projectRepository.findAccessibleProjectById(projectId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project", projectId.toString()));
     }
 }
