@@ -8,3 +8,11 @@ spring:
         format_sql: true
 jwt:
   secret-key: jrwogfu4fnk98ncr6io734fjergvndjvieyw4729r830s9dh02iofduvyc98w4ahifnvejry894398rfuervjoibagve
+
+stripe:
+  api:
+    secret: sk_test_51SoSBG33zTmDJAld7A6ikTFt9XPvod3GE4jyOlBLrk4esV8mRy6ZSCqwEZow0goWVucpJSBLABd26L7DFdGejVFC00EvXRohGm
+  webhook:
+    secret: whsec_1f2beb298b67fc1da93c54082fce1b10a7ecd7f2e09674f3b7e14f646393f1bc
+
+client.url: http://localhost:8080
