@@ -8,6 +8,7 @@ import com.CodingBrajmohan.DarlingAI.entity.ProjectMember;
 import com.CodingBrajmohan.DarlingAI.entity.ProjectMemberId;
 import com.CodingBrajmohan.DarlingAI.entity.User;
 import com.CodingBrajmohan.DarlingAI.enums.ProjectRole;
+import com.CodingBrajmohan.DarlingAI.exception.BadRequestException;
 import com.CodingBrajmohan.DarlingAI.exception.ResourceNotFoundException;
 import com.CodingBrajmohan.DarlingAI.mapper.ProjectMapper;
 import com.CodingBrajmohan.DarlingAI.repository.ProjectMemberRepository;
@@ -15,6 +16,7 @@ import com.CodingBrajmohan.DarlingAI.repository.ProjectRepository;
 import com.CodingBrajmohan.DarlingAI.repository.UserRepository;
 import com.CodingBrajmohan.DarlingAI.security.AuthUtil;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.ProjectService;
+import com.CodingBrajmohan.DarlingAI.service.Interfaces.SubscriptionService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +38,15 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectMapper projectMapper;
     ProjectMemberRepository projectMemberRepository;
     AuthUtil authUtil;
+    SubscriptionService subscriptionService;
 
     @Override
     public ProjectResponse createProject(ProjectRequest request) {
+
+        if(!subscriptionService.canCreateNewProject()) {
+            throw new BadRequestException("User cannot create a New project with current Plan, Upgrade plan now.");
+        }
+
         Long userId = authUtil.getCurrentUserId();
 //        User owner = userRepository.findById(userId).orElseThrow(
 //                () -> new ResourceNotFoundException("User", userId.toString())
