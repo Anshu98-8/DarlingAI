@@ -6,8 +6,18 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+
+  ai:
+    openai:
+      api-key: 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
+      base-url: https://openrouter.ai/api
+      chat:
+        options:
+          model: minimax/minimax-m3.1-flash:free
+          temperature: 0.0
 jwt:
   secret-key: jrwogfu4fnk98ncr6io734fjergvndjvieyw4729r830s9dh02iofduvyc98w4ahifnvejry894398rfuervjoibagve
+
 
 
 
