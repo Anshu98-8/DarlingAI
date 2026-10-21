@@ -4,7 +4,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
 
   ai:
     openai:
@@ -15,8 +15,8 @@ spring:
           model: openrouter/free
           temperature: 0.0
       client:
-        read-timeout: 120s
-        connect-timeout: 60s
+        read-timeout: 300s
+        connect-timeout: 300s
 
 jwt:
   secret-key: jrwogfu4fnk98ncr6io734fjergvndjvieyw4729r830s9dh02iofduvyc98w4ahifnvejry894398rfuervjoibagve

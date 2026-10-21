@@ -1,6 +1,8 @@
 package com.CodingBrajmohan.DarlingAI.service.Implementation;
 
 import com.CodingBrajmohan.DarlingAI.llm.PromptUtils;
+import com.CodingBrajmohan.DarlingAI.llm.advisor.FileTreeContextAdvisor;
+import com.CodingBrajmohan.DarlingAI.llm.tool.CodeGenerationTools;
 import com.CodingBrajmohan.DarlingAI.security.AuthUtil;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.AiGenerationService;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.ProjectFileService;
@@ -26,6 +28,7 @@ public class AiGenerationServiceImpl implements AiGenerationService {
     private final ChatClient chatClient;
     private final AuthUtil authUtil;
     private final ProjectFileService projectFileService;
+    private final FileTreeContextAdvisor fileTreeContextAdvisor;
 
     private static final Pattern FILE_TAG_PATTERN = Pattern.compile("<file path=\"([^\"]+)\">(.*?)</file>", Pattern.DOTALL);
 
@@ -42,11 +45,15 @@ public class AiGenerationServiceImpl implements AiGenerationService {
 
         StringBuilder fullResponseBuffer = new StringBuilder();
 
+        CodeGenerationTools codeGenerationTools = new CodeGenerationTools(projectFileService, projectId);
+
         return chatClient.prompt()
                 .system(PromptUtils.CODE_GENERATION_SYSTEM_PROMPT)
                 .user(userMessage)
+                .tools(codeGenerationTools)
                 .advisors(advisorSpec -> {
                             advisorSpec.params(advisorParams);
+                            advisorSpec.advisors(fileTreeContextAdvisor);
                         }
                 )
                 .stream()

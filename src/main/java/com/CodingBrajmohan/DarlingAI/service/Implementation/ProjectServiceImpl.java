@@ -16,6 +16,7 @@ import com.CodingBrajmohan.DarlingAI.repository.ProjectRepository;
 import com.CodingBrajmohan.DarlingAI.repository.UserRepository;
 import com.CodingBrajmohan.DarlingAI.security.AuthUtil;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.ProjectService;
+import com.CodingBrajmohan.DarlingAI.service.Interfaces.ProjectTemplateService;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.SubscriptionService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -39,6 +40,7 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectMemberRepository projectMemberRepository;
     AuthUtil authUtil;
     SubscriptionService subscriptionService;
+    ProjectTemplateService projectTemplateService;
 
     @Override
     public ProjectResponse createProject(ProjectRequest request) {
@@ -70,6 +72,8 @@ public class ProjectServiceImpl implements ProjectService {
                 .project(project)
                 .build();
         projectMemberRepository.save(projectMember);
+
+        projectTemplateService.initializeProjectFromTemplate(project.getId());
 
         return projectMapper.toProjectResponse(project);
     }
