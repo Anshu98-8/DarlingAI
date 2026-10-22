@@ -4,6 +4,7 @@ package com.CodingBrajmohan.DarlingAI.mapper;
 import com.CodingBrajmohan.DarlingAI.dto.project.ProjectResponse;
 import com.CodingBrajmohan.DarlingAI.dto.project.ProjectSummaryResponse;
 import com.CodingBrajmohan.DarlingAI.entity.Project;
+import com.CodingBrajmohan.DarlingAI.enums.ProjectRole;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,8 +15,7 @@ public interface ProjectMapper {
 
     ProjectResponse toProjectResponse(Project project);
 
-    @Mapping(target = "projectName", source = "name")
-    ProjectSummaryResponse toProjectSummaryResponse(Project project);
+    ProjectSummaryResponse toProjectSummaryResponse(Project project, ProjectRole role);
 
     List<ProjectSummaryResponse> toListOfProjectSummaryResponse(List<Project> projects);
 

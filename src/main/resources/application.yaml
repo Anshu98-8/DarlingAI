@@ -8,15 +8,9 @@ spring:
 
   ai:
     openai:
+      timeout: 300s
       base-url: https://openrouter.ai/api/v1
       api-key: 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
-      chat:
-        options:
-          model: openrouter/free
-          temperature: 0.0
-      client:
-        read-timeout: 300s
-        connect-timeout: 300s
 
 jwt:
   secret-key: jrwogfu4fnk98ncr6io734fjergvndjvieyw4729r830s9dh02iofduvyc98w4ahifnvejry894398rfuervjoibagve

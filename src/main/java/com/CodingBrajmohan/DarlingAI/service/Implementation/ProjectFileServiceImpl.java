@@ -4,6 +4,7 @@ package com.CodingBrajmohan.DarlingAI.service.Implementation;
 
 import com.CodingBrajmohan.DarlingAI.dto.project.FileContentResponse;
 import com.CodingBrajmohan.DarlingAI.dto.project.FileNode;
+import com.CodingBrajmohan.DarlingAI.dto.project.FileTreeResponse;
 import com.CodingBrajmohan.DarlingAI.entity.Project;
 import com.CodingBrajmohan.DarlingAI.entity.ProjectFile;
 import com.CodingBrajmohan.DarlingAI.exception.ResourceNotFoundException;
@@ -43,9 +44,10 @@ public class ProjectFileServiceImpl implements ProjectFileService {
     private static final String BUCKET_NAME = "projects";
 
     @Override
-    public List<FileNode> getFileTree(Long projectId) {
+    public FileTreeResponse getFileTree(Long projectId) {
         List<ProjectFile> projectFileList = projectFileRepository.findByProjectId(projectId);
-        return projectFileMapper.toListOfFileNode(projectFileList);
+        List<FileNode> projectFileNodes = projectFileMapper.toListOfFileNode(projectFileList);
+        return new FileTreeResponse(projectFileNodes);
     }
 
     @Override

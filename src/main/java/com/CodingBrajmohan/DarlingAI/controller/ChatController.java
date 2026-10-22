@@ -2,9 +2,11 @@ package com.CodingBrajmohan.DarlingAI.controller;
 
 import com.CodingBrajmohan.DarlingAI.dto.chat.ChatRequest;
 import com.CodingBrajmohan.DarlingAI.dto.chat.ChatResponse;
+import com.CodingBrajmohan.DarlingAI.dto.chat.StreamResponse;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.AiGenerationService;
 
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.ChatService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +18,18 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/chat")
 public class ChatController {
 
     private final AiGenerationService aiGenerationService;
     private final ChatService chatService;
 
-    @PostMapping(value = "/api/chat/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ServerSentEvent<String>> streamChat(
+    @PostMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<StreamResponse>> streamChat(
             @RequestBody ChatRequest request) {
 
         return aiGenerationService.streamResponse(request.message(), request.projectId())
-                .map(data -> ServerSentEvent.<String>builder()
+                .map(data -> ServerSentEvent.<StreamResponse>builder()
                         .data(data)
                         .build());
     }
