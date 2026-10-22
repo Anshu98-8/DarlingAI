@@ -1,9 +1,11 @@
 package com.CodingBrajmohan.DarlingAI.controller;
 
+import com.CodingBrajmohan.DarlingAI.dto.deploy.DeployResponse;
 import com.CodingBrajmohan.DarlingAI.dto.project.ProjectRequest;
 import com.CodingBrajmohan.DarlingAI.dto.project.ProjectResponse;
 import com.CodingBrajmohan.DarlingAI.dto.project.ProjectSummaryResponse;
 import com.CodingBrajmohan.DarlingAI.entity.Project;
+import com.CodingBrajmohan.DarlingAI.service.Interfaces.DeploymentService;
 import com.CodingBrajmohan.DarlingAI.service.Interfaces.ProjectService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -21,6 +23,7 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final DeploymentService deploymentService;
 
     @GetMapping
     public ResponseEntity<List<ProjectSummaryResponse>> getMyProjects() {
@@ -46,6 +49,11 @@ public class ProjectController {
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.softDelete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/deploy")
+    public ResponseEntity<DeployResponse> deployProject(@PathVariable Long id) {
+        return ResponseEntity.ok(deploymentService.deploy(id));
     }
 
 }
