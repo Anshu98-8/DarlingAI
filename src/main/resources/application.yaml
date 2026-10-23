@@ -6,6 +6,11 @@ spring:
       hibernate:
         format_sql: false
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   ai:
     openai:
       timeout: 300s

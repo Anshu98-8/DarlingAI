@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: runner-pool
-  namespace: darlingai-apps
+  namespace: darling-ai-apps
 spec:
   replicas: 2
   selector:
@@ -42,7 +42,7 @@ spec:
 #        - name: syncer
 #          image: minio/mc
         - name: syncer
-          image: darlingai-syncer:v1
+          image: darling-ai-syncer:v1
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c", "sleep infinity"]
           env:
